@@ -15,7 +15,7 @@ cd "${GITHUB_WORKSPACE}" || exit
 # download kernel source
 aria2c https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.7.tar.xz
 mv *.tar.xz kernel.tar.xz
-tar -xvf kernel.tar.xz
+tar -xf kernel.tar.xz
 cd linux-6.7 || exit
 
 # copy config file
