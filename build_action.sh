@@ -1,25 +1,28 @@
 #!/usr/bin/env bash
 
-VERSION=$(grep 'Kernel Configuration' < config | awk '{print $3}')
 
 # add deb-src to sources.list
 sed -i "/deb-src/s/# //g" /etc/apt/sources.list
 
 # install dep
 apt update
-apt install -y wget xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev
+apt install -y wget xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev aria2 git
 apt build-dep -y linux
 
 # change dir to workplace
 cd "${GITHUB_WORKSPACE}" || exit
 
 # download kernel source
-wget http://www.kernel.org/pub/linux/kernel/v5.x/linux-"$VERSION".tar.xz
-tar -xf linux-"$VERSION".tar.xz
-cd linux-"$VERSION" || exit
+aria2c https://mirrors.edge.kernel.org/pub/linux/kernel/v6.x/linux-6.7.tar.xz
+mv *.tar.xz kernel.tar.xz
+tar -xvf kernel.tar.xz
+cd linux-6.7 || exit
 
 # copy config file
 cp ../config .config
+
+#patch cjktty
+patch -Np1 < ../cjktty/cjktty-6.7.patch
 
 # disable DEBUG_INFO to speedup build
 scripts/config --disable DEBUG_INFO
@@ -30,7 +33,7 @@ source ../patch.d/*.sh
 
 # build deb packages
 CPU_CORES=$(($(grep -c processor < /proc/cpuinfo)*2))
-make deb-pkg -j"$CPU_CORES"
+echo "y" | make deb-pkg -j"$CPU_CORES"
 
 # move deb packages to artifact dir
 cd ..

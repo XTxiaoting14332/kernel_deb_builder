@@ -18,3 +18,20 @@ jobs:
         with:
           name: artifact
           path: ${{ github.workspace }}/artifact/
+
+      - name: Rename
+        run: |
+          mv ${{ github.workspace }}/artifact/*.deb ${{ github.workspace }}/artifact/kernel.deb
+
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: 6.7-NightWind
+          body_path: RELEASE_CHANGELOG.md
+          prerelease: false
+          draft: true
+          generate_release_notes: true
+          token: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          files: |
+            ${{ github.workspace }}/artifact/kernel.deb
