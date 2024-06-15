@@ -6,7 +6,7 @@ sed -i "/deb-src/s/# //g" /etc/apt/sources.list
 
 # install dep
 apt update
-apt install -y wget xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev aria2 build-essential devscripts dwarves
+apt install -y wget zstd xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev aria2 build-essential devscripts dwarves
 apt build-dep -y linux
 
 # change dir to workplace
