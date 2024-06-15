@@ -32,8 +32,9 @@ scripts/config --disable DEBUG_INFO
 source ../patch.d/*.sh
 
 # build deb packages
+make loadconfig ../config
 CPU_CORES=$(($(grep -c processor < /proc/cpuinfo)*2))
-echo "y" | make all -j"$CPU_CORES"
+make -j"$CPU_CORES"
 mkdit ../done
 mv ./* ../done/
 
