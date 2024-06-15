@@ -32,10 +32,10 @@ scripts/config --disable DEBUG_INFO
 source ../patch.d/*.sh
 
 # build deb packages
-make loadconfig ../config
+make oldconfig
 CPU_CORES=$(($(grep -c processor < /proc/cpuinfo)*2))
-make -j"$CPU_CORES"
-mkdit ../done
+make all -j"$CPU_CORES"
+mkdir ../done
 mv ./* ../done/
 
 # move deb packages to artifact dir
