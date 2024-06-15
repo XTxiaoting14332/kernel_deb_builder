@@ -33,13 +33,11 @@ source ../patch.d/*.sh
 
 # build deb packages
 CPU_CORES=$(($(grep -c processor < /proc/cpuinfo)*2))
-git init
-git add .
-git commit -m "1"
-echo "y" | make deb-pkg -j"$CPU_CORES"
+echo "y" | make all -j"$CPU_CORES"
+mkdit ../done
+mv ./* ../done/
 
 # move deb packages to artifact dir
 cd ..
-rm -rfv *dbg*.deb
-mkdir "artifact"
-mv ./*.deb artifact/
+tar zcf kernel.tar.gz done/
+mv kernel.tar.gz artifact/
