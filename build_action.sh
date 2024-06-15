@@ -6,7 +6,7 @@ sed -i "/deb-src/s/# //g" /etc/apt/sources.list
 
 # install dep
 apt update
-apt install -y wget xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev aria2
+apt install -y wget xz-utils make gcc flex bison dpkg-dev bc rsync kmod cpio libssl-dev aria2 build-essential devscripts dwarves
 apt build-dep -y linux
 
 # change dir to workplace
@@ -33,6 +33,9 @@ source ../patch.d/*.sh
 
 # build deb packages
 CPU_CORES=$(($(grep -c processor < /proc/cpuinfo)*2))
+git init
+git add .
+git commit -m "1"
 echo "y" | make deb-pkg -j"$CPU_CORES"
 
 # move deb packages to artifact dir
