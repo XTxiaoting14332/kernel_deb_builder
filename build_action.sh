@@ -35,8 +35,7 @@ source ../patch.d/*.sh
 
 # build deb packages
 make oldconfig
-CPU_CORES=$(($(grep -c processor < /proc/cpuinfo)*2))
-make all -j"$CPU_CORES"
+make all -j$(nproc)
 mkdir ../done
 mv ./* ../done/
 
